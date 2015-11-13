@@ -7,7 +7,7 @@
 
 	L.Hash = function(map) {
 		this.onHashChange = L.Util.bind(this.onHashChange, this);
-
+		this.options = options;
 		if (map) {
 			this.init(map);
 		}
@@ -17,9 +17,10 @@
 		if(hash.indexOf('#') === 0) {
 			hash = hash.substr(1);
 		}
+		var zoomOffset = this.options && this.options.zoomOffset ? this.options.zoomOffset : 0;
 		var args = hash.split("/");
 		if (args.length == 3) {
-			var zoom = parseInt(args[0], 10),
+			var zoom = parseInt(args[0], 10) + zoomOffset,
 			lat = parseFloat(args[1]),
 			lon = parseFloat(args[2]);
 			if (isNaN(zoom) || isNaN(lat) || isNaN(lon)) {
@@ -150,8 +151,8 @@
 			this.isListening = false;
 		}
 	};
-	L.hash = function(map) {
-		return new L.Hash(map);
+	L.hash = function(map, options) {
+		return new L.Hash(map, options);
 	};
 	L.Map.prototype.addHash = function() {
 		this._hash = L.hash(this);
